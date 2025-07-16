@@ -1,8 +1,8 @@
-export default function TaskCard({ title, date, color }) {
+// app/components/TaskCard.jsx
+export default function TaskCard({ task }) {
   return (
-    <div className={`${color}`}>
-      <p>{title}</p>
-      <span>🕒{date}</span>
+    <div className="bg-white p-2 mb-2 shadow-sm border rounded text-sm">
+      {task.title}
     </div>
   );
 }
