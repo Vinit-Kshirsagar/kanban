@@ -62,11 +62,11 @@ export default function KanbanBoard() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex gap-6 p-6 bg-gray-100 min-h-screen">
+        <div className="w-screen h-screen flex justify-center items-start gap-6 p-6 bg-gray-100 overflow-x-auto">
         {columns.map((col) => (
           <div
             key={col.id}
-            className={`w-80 p-4 border rounded shadow ${col.color}`}
+            className={`w-96 p-6 border rounded shadow-lg ${col.color}`}
           >
             <h2 className="text-lg font-bold mb-4">{col.title}</h2>
 
@@ -118,7 +118,7 @@ export default function KanbanBoard() {
                 />
                 <button
                   onClick={() => handleAddTask(col.id)}
-                  className="w-full bg-blue-500 text-white text-sm py-1 rounded hover:bg-blue-600"
+                  className="w-full bg-purple-300 text-white text-sm py-1 rounded hover:bg-purple-400"
                 >
                   Add
                 </button>
@@ -126,11 +126,13 @@ export default function KanbanBoard() {
             )}
 
             <button
-              onClick={() => toggleInput(col.id)}
-              className="mt-2 w-full bg-white border border-gray-400 rounded p-1 text-sm hover:bg-gray-100"
+            onClick={() => toggleInput(col.id)}
+            className="mt-2 w-full flex items-center justify-center gap-1 bg-white border border-gray-400 rounded p-2 text-sm 
+                      hover:bg-gray-200 hover:scale-[1.02] transition duration-200 ease-in-out shadow-sm"
             >
-              + Add Task
+            ➕ Add Task
             </button>
+
           </div>
         ))}
       </div>
