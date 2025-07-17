@@ -127,9 +127,9 @@ export default function KanbanBoard() {
 
             <button
             onClick={() => toggleInput(col.id)}
-            className="mt-2 w-full flex items-center justify-center gap-1 bg-white border border-gray-400 rounded p-2 text-sm 
-                      hover:bg-gray-200 hover:scale-[1.02] transition duration-200 ease-in-out shadow-sm"
-            >
+            className="mt-2 w-full flex items-center justify-center gap-1 bg-white border border-gray-400 
+            rounded-full p-2 text-sm hover:bg-gray-200 hover:scale-[1.02] transition duration-200 
+            ease-in-out shadow-sm">
             ➕ Add Task
             </button>
 
