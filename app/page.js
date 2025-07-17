@@ -10,9 +10,10 @@ const users = [
 
 export default function HomePage() {
   const router = useRouter();
-
+// can change layout
   return (
     <div className="p-6">
+
       <h1 className="text-2xl font-bold mb-4">Select a User</h1>
       <ul className="space-y-2">
         {users.map(user => (
