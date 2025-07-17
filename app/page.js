@@ -10,7 +10,7 @@ const users = [
 
 export default function HomePage() {
   const router = useRouter();
-// can change layout
+
   return (
     <div className="p-6">
 
