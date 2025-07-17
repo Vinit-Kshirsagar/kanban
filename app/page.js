@@ -1,141 +1,31 @@
+// app/page.js
 'use client';
+import { useRouter } from 'next/navigation';
 
-import { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import TaskCard from './components/TaskCard';
-
-const columns = [
-  { id: 'todo', title: 'To-Do', color: 'bg-red-100' },
-  { id: 'inprogress', title: 'In Progress', color: 'bg-orange-100' },
-  { id: 'done', title: 'Done', color: 'bg-green-100' },
+const users = [
+  { id: 'u1', name: 'Alice' },
+  { id: 'u2', name: 'Bob' },
+  { id: 'u3', name: 'Charlie' },
 ];
 
-const initialTasks = [
-  { id: '1', title: 'Design login UI', columnId: 'todo' },
-  { id: '2', title: 'Connect API', columnId: 'inprogress' },
-  { id: '3', title: 'Deploy', columnId: 'done' },
-];
-
-export default function KanbanBoard() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [newTaskInputs, setNewTaskInputs] = useState({});
-  const [showInputs, setShowInputs] = useState({});
-
-  // Drag and Drop Logic
-  const handleDragEnd = (result) => {
-    const { source, destination, draggableId } = result;
-    if (!destination) return;
-
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === draggableId
-          ? { ...task, columnId: destination.droppableId }
-          : task
-      )
-    );
-  };
-
-  // Add Task Button Click
-  const toggleInput = (columnId) => {
-    setShowInputs((prev) => ({
-      ...prev,
-      [columnId]: !prev[columnId],
-    }));
-  };
-
-  // Add Task Submit
-  const handleAddTask = (columnId) => {
-    const inputText = newTaskInputs[columnId]?.trim();
-    if (!inputText) return;
-
-    const newTask = {
-      id: Date.now().toString(),
-      title: inputText,
-      columnId,
-    };
-
-    setTasks((prev) => [...prev, newTask]);
-
-    setNewTaskInputs((prev) => ({ ...prev, [columnId]: '' }));
-    setShowInputs((prev) => ({ ...prev, [columnId]: false }));
-  };
+export default function HomePage() {
+  const router = useRouter();
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="w-screen h-screen flex justify-center items-start gap-6 p-6 bg-gray-100 overflow-x-auto">
-        {columns.map((col) => (
-          <div
-            key={col.id}
-            className={`w-96 p-6 border rounded shadow-lg ${col.color}`}
-          >
-            <h2 className="text-lg font-bold mb-4">{col.title}</h2>
-
-            <Droppable droppableId={col.id}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className="min-h-[100px] flex flex-col gap-2"
-                >
-                  {tasks
-                    .filter((task) => task.columnId === col.id)
-                    .map((task, index) => (
-                      <Draggable
-                        key={task.id}
-                        draggableId={task.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <TaskCard task={task} />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* Input Field for Adding Tasks */}
-            {showInputs[col.id] && (
-              <div className="mt-2">
-                <input
-                  type="text"
-                  placeholder="Enter task..."
-                  value={newTaskInputs[col.id] || ''}
-                  onChange={(e) =>
-                    setNewTaskInputs((prev) => ({
-                      ...prev,
-                      [col.id]: e.target.value,
-                    }))
-                  }
-                  className="w-full p-1 border rounded text-sm mb-1"
-                />
-                <button
-                  onClick={() => handleAddTask(col.id)}
-                  className="w-full bg-purple-300 text-white text-sm py-1 rounded hover:bg-purple-400"
-                >
-                  Add
-                </button>
-              </div>
-            )}
-
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Select a User</h1>
+      <ul className="space-y-2">
+        {users.map(user => (
+          <li key={user.id}>
             <button
-            onClick={() => toggleInput(col.id)}
-            className="mt-2 w-full flex items-center justify-center gap-1 bg-white border border-gray-400 
-            rounded-full p-2 text-sm hover:bg-gray-200 hover:scale-[1.02] transition duration-200 
-            ease-in-out shadow-sm">
-            ➕ Add Task
+              onClick={() => router.push(`/users/${user.id}`)}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              {user.name}
             </button>
-
-          </div>
+          </li>
         ))}
-      </div>
-    </DragDropContext>
+      </ul>
+    </div>
   );
 }
