@@ -32,9 +32,10 @@ export default function UserList() {
   };
 
   const handleLogin = (user) => {
-    login(user);                // update context
-    router.push('/dashboard');  // navigate to dashboard or boards
-  };
+  login(user);                // sets currentUser in context
+  router.push('/dashboard'); // redirects after login
+};
+
 
   return (
     <div className="p-4 max-w-2xl mx-auto border rounded bg-white shadow-md">

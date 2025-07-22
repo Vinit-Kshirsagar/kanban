@@ -1,22 +1,48 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { useUser } from '@contexts/UserContext';
-import UserList from '@user/UserList';
+import { useRouter } from 'next/navigation';
+import StyledWrapper from '../../components/ui/StyledWrapper';
+
+
 
 export default function LoginPage() {
-  const { login } = useUser();
+  const { loginUser } = useUser();
   const router = useRouter();
+  const [username, setUsername] = useState('');
 
-  const handleLogin = (user) => {
-    login(user);
-    router.push('/dashboard'); // or '/boards'
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem('kanban_users')) || [];
+    const found = users.find(u => u.name === username);
+
+    if (found) {
+      loginUser(found);
+      router.push('/');
+    } else {
+      alert('User not found. Please add a user first.');
+    }
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-3xl font-bold text-center mb-10">Select a User to Login</h1>
-      <UserList onLogin={handleLogin} />
-    </main>
+    <StyledWrapper>
+      <div className="form-container">
+        <p className="title">Login</p>
+        <form className="form" onSubmit={handleLogin}>
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <button className="sign" type="submit">Sign in</button>
+        </form>
+      </div>
+    </StyledWrapper>
   );
 }

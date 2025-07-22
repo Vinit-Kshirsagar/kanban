@@ -1,37 +1,46 @@
-// contexts/UserContext.js
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 
-export const UserContext = createContext();
+// Create context
+const UserContext = createContext();
 
-export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+// Create provider
+export function UserProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Load user from localStorage on first load
+  // Restore user from localStorage on page reload
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('kanban_logged_in_user'));
-    if (storedUser) {
-      setUser(storedUser);
+    const stored = localStorage.getItem('kanban_logged_user');
+    if (stored) {
+      try {
+        const user = JSON.parse(stored);
+        setCurrentUser(user);
+      } catch (err) {
+        console.error('Error parsing stored user:', err);
+        localStorage.removeItem('kanban_logged_user');
+      }
     }
   }, []);
 
+  // Login handler
   const login = (user) => {
-    setUser(user);
-    localStorage.setItem('kanban_logged_in_user', JSON.stringify(user));
+    setCurrentUser(user);
+    localStorage.setItem('kanban_logged_user', JSON.stringify(user));
   };
 
+  // Logout handler
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('kanban_logged_in_user');
+    setCurrentUser(null);
+    localStorage.removeItem('kanban_logged_user');
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ currentUser, login, logout }}>
       {children}
     </UserContext.Provider>
   );
-};
+}
 
-// Optional: Custom hook for convenience
+// Custom hook
 export const useUser = () => useContext(UserContext);
